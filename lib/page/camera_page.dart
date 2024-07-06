@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_camera/page/photo_page.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CameraApp extends StatefulWidget {
-  const CameraApp({super.key});
+  const CameraApp({super.key, required this.cameras});
+  final List<CameraDescription> cameras;
 
   @override
   State<CameraApp> createState() => _CameraAppState();
@@ -19,12 +21,7 @@ class _CameraAppState extends State<CameraApp> {
   @override
   void initState() {
     super.initState();
-    initCameras();
-  }
-
-  Future<void> initCameras() async {
-    cameras = await availableCameras();
-    controller = CameraController(cameras[0], ResolutionPreset.max);
+    controller = CameraController(widget.cameras[0], ResolutionPreset.max);
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -67,8 +64,8 @@ class _CameraAppState extends State<CameraApp> {
         alignment: Alignment.bottomCenter,
         child: IconButton(
           icon: const Icon(
-            Icons.add,
-            size: 30,
+            CupertinoIcons.photo_camera_solid,
+            size: 40,
             color: Colors.white,
           ),
           onPressed: () {
@@ -84,7 +81,9 @@ class _CameraAppState extends State<CameraApp> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const PhotosPage(),
+                            builder: (context) => PhotosPage(
+                              cameras: widget.cameras,
+                            ),
                           ),
                         );
                       },

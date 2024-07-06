@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_camera/page/camera_page.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PhotosPage extends StatefulWidget {
-  const PhotosPage({super.key});
+  const PhotosPage({super.key, required this.cameras});
+  final List<CameraDescription> cameras;
 
   @override
   State<PhotosPage> createState() => _PhotosPageState();
@@ -61,7 +63,9 @@ class _PhotosPageState extends State<PhotosPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CameraApp(),
+              builder: (context) => CameraApp(
+                cameras: widget.cameras,
+              ),
             ),
           );
         },
